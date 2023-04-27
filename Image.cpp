@@ -1,5 +1,5 @@
 #include "Image.hpp"
-//hello world
+
 namespace prog
 {
   Image::Image(int w, int h, const Color &fill)
