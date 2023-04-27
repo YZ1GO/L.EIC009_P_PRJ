@@ -57,10 +57,14 @@ namespace prog {
                 to_gray_scale();
                 continue;
             }
-            //if (command == "replace") {
-            //    replace(rgb_value r1, rgb_value g1, rgb_value b1, rgb_value r2, rgb_value g2, rgb_value b2);
-            //    continue;
-            //}
+            if (command == "replace") {
+                replace();
+                continue;
+            }
+            if (command == "fill") {
+                fill();
+                continue;
+            }
             if (command == "h_mirror") {
                 h_mirror();
                 continue;
@@ -69,12 +73,20 @@ namespace prog {
                 v_mirror();
                 continue;
             }
+            if (command == "add") {
+                add();
+                continue;
+            }
             if (command == "rotate_left") {
                 rotate_left();
                 continue;
             }
             if (command == "rotate_right") {
                 rotate_right();
+                continue;
+            }
+            if (command == "crop") {
+                crop();
                 continue;
             }
         }
@@ -123,20 +135,77 @@ namespace prog {
             }
         }
     }
-    void Script::replace(rgb_value r1, rgb_value g1, rgb_value b1, rgb_value r2, rgb_value g2, rgb_value b2) {
+    void Script::replace() {
+        Color target_color, replacement_color;
+        input >> target_color >> replacement_color; // read the color values from the script file
         // loop through all pixels in given image and replaces all (r1, g1, b1) pixels by (r2, g2, b2)
         for (int x = 0; x < image->width(); x++) {
             for (int y = 0; y < image->height(); y++) {
                 Color& pixel = image->at(x, y);
-                if (pixel.red() == r1 && pixel.green() == g1 && pixel.blue() == b1) {
-                    pixel.red() = r2;
-                    pixel.green() = g2;
-                    pixel.blue() = b2;
+                // if pixel's color is equal to target color change it to replacement color
+                if (pixel.red() == target_color.red() && pixel.green() == target_color.green() && pixel.blue() == target_color.blue()) {
+                    pixel = replacement_color;
                 }
             }
         }
     }
-    
+    void Script::fill() {
+        int x, y, w, h;
+        Color replacement_color;
+        input >> x >> y >> w >> h >> replacement_color; // read the top-left corner (x, y), width value, height value and the color value from the script file
+        // loop through all pixels in given image...
+        for (int i = 0; i < image->width(); i++) {
+            for (int j = 0; j < image->height(); j++) {
+                Color& pixel = image->at(i, j);
+                // if pixel is located inside the defined rectangle...
+                if (i < x + w && i >= x && j < y + h && j >= y) {
+                    pixel = replacement_color; // replace it's color to the given one
+                }
+            }
+        }
+    }
+    void Script::add() {
+        int w, h, x, y;
+        string filename;
+        Color fill, neutral;
+        input >> w >> h >> fill;   // read the width and height values for the stored image
+        // create a new image representing the stored image
+        Image* blank_image = new Image(w, h, fill);
+        while (input >> filename >> neutral >> x >> y){
+            // loop through all pixels in stored image
+            for (int i = 0; i < image->width(); i++) {
+                for (int j = 0; j < image->height(); j++) {
+                    Color& pixel = image->at(i, j);
+                    // if pixel's color isn't the same as the "neutral" color
+                    if (pixel.red() != neutral.red() || pixel.green() != neutral.green() || pixel.blue() != neutral.blue()) {
+                        if (i < x + w && i >= x && j < y + h && j >= y) {
+                            blank_image->at(i - x, j - y) = pixel;
+                        }
+                    }
+                }
+            }
+        }
+        delete image;
+        image = blank_image;
+    }
+    void Script::crop() {
+        int x, y, w, h;
+        input >> x >> y >> w >> h; // red the top-left corner (x, y), width value and height value
+        // create new image with w width and h height
+        Image* new_image = new Image(w, h);
+        // loop through all pixels in original image...
+        for (int i = 0; i < image->width(); i++) {
+            for (int j = 0; j < image->height(); j++) {
+                Color& pixel = image->at(i, j);
+                // if pixel is within the croped range
+                if (i < x + w && i >= x && j < y + h && j >= y) {
+                    new_image->at(i - x, j - y) = pixel; // paste the pixel to the new image
+                }
+            }
+        }
+        delete image; // delete original image
+        image = new_image; // move the cropped image to the original image's place since it's empty
+    }
     void Script::h_mirror() {
         int w = image->width();
         // mirror image horizontally. Pixels (x, y) and (width() - 1 - x, y) for all 0 <= x < width()/2 and 0 <= y < height()
