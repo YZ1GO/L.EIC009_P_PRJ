@@ -124,11 +124,12 @@ namespace prog {
         }
     }
     void Script::to_gray_scale() {
-        // loop through all pixels in given image and transforms each one to (v, v, v) where v = (r, g, b)/3
+        // loop through all pixels in given image and transforms each one to (v, v, v), where v = (r, g, b)/3
         for (int x = 0; x < image->width(); x++) {
             for (int y = 0; y < image->height(); y++) {
                 Color& pixel = image->at(x, y);
-                rgb_value v = (pixel.red() + pixel.green() + pixel.blue())/3;
+                // calculate v
+                rgb_value v = (pixel.red() + pixel.green() + pixel.blue())/3; 
                 pixel.red() = v;
                 pixel.green() = v;
                 pixel.blue() = v;
@@ -136,15 +137,16 @@ namespace prog {
         }
     }
     void Script::replace() {
-        Color target_color, replacement_color;
-        input >> target_color >> replacement_color; // read the color values from the script file
-        // loop through all pixels in given image and replaces all (r1, g1, b1) pixels by (r2, g2, b2)
+        Color target_color, replacement_color; 
+        input >> target_color >> replacement_color; // read the color values from the script file ((r1, g1, b1) and (r2, g2, b2))
+        
+        // loop through all pixels in given image...
         for (int x = 0; x < image->width(); x++) {
             for (int y = 0; y < image->height(); y++) {
                 Color& pixel = image->at(x, y);
-                // if pixel's color is equal to target color change it to replacement color
+                // if pixel's color is equal to target color change it to replacement color 
                 if (pixel.red() == target_color.red() && pixel.green() == target_color.green() && pixel.blue() == target_color.blue()) {
-                    pixel = replacement_color;
+                    pixel = replacement_color; // (r1, g1, b1) = (r2, g2, b2)
                 }
             }
         }
@@ -153,6 +155,7 @@ namespace prog {
         int x, y, w, h;
         Color replacement_color;
         input >> x >> y >> w >> h >> replacement_color; // read the top-left corner (x, y), width value, height value and the color value from the script file
+        
         // loop through all pixels in given image...
         for (int i = 0; i < image->width(); i++) {
             for (int j = 0; j < image->height(); j++) {
@@ -165,57 +168,56 @@ namespace prog {
         }
     }
     void Script::add() {
-        int w, h, x, y;
         string filename;
-        Color fill, neutral;
-        input >> w >> h >> fill;   // read the width and height values for the stored image
-        // create a new image representing the stored image
-        Image* blank_image = new Image(w, h, fill);
-        while (input >> filename >> neutral >> x >> y){
-            // loop through all pixels in stored image
-            for (int i = 0; i < image->width(); i++) {
-                for (int j = 0; j < image->height(); j++) {
-                    Color& pixel = image->at(i, j);
-                    // if pixel's color isn't the same as the "neutral" color
-                    if (pixel.red() != neutral.red() || pixel.green() != neutral.green() || pixel.blue() != neutral.blue()) {
-                        if (i < x + w && i >= x && j < y + h && j >= y) {
-                            blank_image->at(i - x, j - y) = pixel;
-                        }
-                    }
+        Color neutral;
+        int x, y;
+        input >> filename >> neutral >> x >> y; // read the image "filename", the "neutral" color value and top-left corner (x, y) from the script file
+        
+        // load "filename" image from the file
+        Image* add_image = loadFromPNG(filename);
+        
+        // loop through all pixels in "filename" image needed to add...
+        for (int i = 0; i < add_image->width(); i++) {
+            for (int j = 0; j < add_image->height(); j++) {
+                Color& add_pixel = add_image->at(i, j);
+                // if add_pixel's color isn't the same as the "neutral" color...
+                if (add_pixel.red() != neutral.red() || add_pixel.green() != neutral.green() || add_pixel.blue() != neutral.blue()) {
+                    image->at(i + x, j + y) = add_pixel; // paste the add_pixel to the current image in the correct position
                 }
             }
         }
-        delete image;
-        image = blank_image;
+        delete add_image; // delete the loaded image from the file
     }
     void Script::crop() {
         int x, y, w, h;
-        input >> x >> y >> w >> h; // red the top-left corner (x, y), width value and height value
-        // create new image with w width and h height
-        Image* new_image = new Image(w, h);
+        input >> x >> y >> w >> h; // read the top-left corner (x, y), width value and height value from the script file
+        
+        // create "cropped_image" with "w" width and "h" height
+        Image* cropped_image = new Image(w, h);
+        
         // loop through all pixels in original image...
         for (int i = 0; i < image->width(); i++) {
             for (int j = 0; j < image->height(); j++) {
                 Color& pixel = image->at(i, j);
-                // if pixel is within the croped range
+                // if pixel is within the cropped range...
                 if (i < x + w && i >= x && j < y + h && j >= y) {
-                    new_image->at(i - x, j - y) = pixel; // paste the pixel to the new image
+                    cropped_image->at(i - x, j - y) = pixel; // paste the pixel to the "crpped_image" in the correct position
                 }
             }
         }
         delete image; // delete original image
-        image = new_image; // move the cropped image to the original image's place since it's empty
+        image = cropped_image; // move the cropped image to the original image's place since it's empty
     }
     void Script::h_mirror() {
         int w = image->width();
         // mirror image horizontally. Pixels (x, y) and (width() - 1 - x, y) for all 0 <= x < width()/2 and 0 <= y < height()
-        for (int x = 0; x < image->width()/2; x++) { // for all pixels through x axis (rightwards) until it reaches y axis that splits image into 2 equal halves
+        for (int x = 0; x < image->width()/2; x++) { // for all pixels through x axis (rightwards) until they reach y axis that splits image into 2 equal halves...
             for (int y = 0; y < image->height(); y++) {
                 Color& pixel_1 = image->at(x, y); // get pixel
                 Color& pixel_2 = image->at(w - 1 - x, y); // get the symmetric pixel (through y axis)
-                Color temp = pixel_1;   // create a temporary color to store pixel_1
-                pixel_1 = pixel_2;      // change the color of pixel_1 to it's horizontal symmetric  (pixel_2)
-                pixel_2 = temp;         // change the color of pixel_2 to color of original pixel_1
+                Color temp = pixel_1;   // create a temporary color to store "pixel_1"
+                pixel_1 = pixel_2;      // change the color of "pixel_1" to it's horizontal symmetric  (pixel_2)
+                pixel_2 = temp;         // change the color of "pixel_2" to color of original "pixel_1"
             }
         }
     }
@@ -223,12 +225,12 @@ namespace prog {
         int h = image->height();
         // mirror image vertically. Pixels (x, y) and (x, height() - 1 - y) for all 0 <= x < width() and 0 <= y < height()/2
         for (int x = 0; x < image->width(); x++) {
-            for (int y = 0; y < image->height()/2; y++) { // for all pixels through y axis (downwards) until it reaches x axis that splits image into 2 equal halves
+            for (int y = 0; y < image->height()/2; y++) { // for all pixels through y axis (downwards) until they reach x axis that splits image into 2 equal halves...
                 Color& pixel_1 = image->at(x, y); // get pixel 
-                Color& pixel_2 = image->at(x, h - 1 -y); // get the symmetric pixel (through x axis)
+                Color& pixel_2 = image->at(x, h - 1 - y); // get the symmetric pixel (through x axis)
                 Color temp = pixel_1;   // create a temporary color to store pixel_1
-                pixel_1 = pixel_2;      // change the color of pixel_1 to it's vertical symmetric  (pixel_2)
-                pixel_2 = temp;         // change the color of pixel_2 to color of original pixel_1
+                pixel_1 = pixel_2;      // change the color of "pixel_1" to it's vertical symmetric  (pixel_2)
+                pixel_2 = temp;         // change the color of "pixel_2" to color of original "pixel_1"
             }
         }
     }
@@ -240,10 +242,10 @@ namespace prog {
         for (int x = 0; x < image->width(); x++) {
             for (int y = 0; y < image->height(); y++) {
                 Color& pixel = image->at(x, y); // get pixel from original image
-                rotated_image->at(y, image->width() - 1 - x) = pixel; // set pixels in rotated image
+                rotated_image->at(y, image->width() - 1 - x) = pixel; // set pixels in rotated image in correct place
             }
         }
-        delete image; // eliminate original image
+        delete image; // delete original image
         image = rotated_image;  // move the rotated image to the original image's place since it's empty
     }
     void Script::rotate_right() {
@@ -254,10 +256,10 @@ namespace prog {
         for (int x = 0; x < image->width(); x++) {
             for (int y = 0; y < image->height(); y++) {
                 Color& pixel = image->at(x, y); // get pixel from original image
-                rotated_image->at(image->height() - 1 - y, x) = pixel; // set pixels in rotated image
+                rotated_image->at(image->height() - 1 - y, x) = pixel; // set pixels in rotated image in correct place
             }
         }
-        delete image; //eliminate original image
+        delete image; //delete original image
         image = rotated_image;  // move the rotated image to the original image's place since it's empty
     }
 
