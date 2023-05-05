@@ -3,7 +3,7 @@
 #include "Script.hpp"
 #include "PNG.hpp"
 #include "XPM2.hpp"
-
+#include <algorithm> // to use "sort" in "median_filter"
 using namespace std;
 
 namespace prog {
@@ -87,6 +87,10 @@ namespace prog {
             }
             if (command == "crop") {
                 crop();
+                continue;
+            }
+            if (command == "median_filter") {
+                median_filter();
                 continue;
             }
         }
@@ -195,7 +199,7 @@ namespace prog {
         // create "cropped_image" with "w" width and "h" height
         Image* cropped_image = new Image(w, h);
         
-        // loop through all pixels in original image...
+        // loop through all pixels in given image...
         for (int i = 0; i < image->width(); i++) {
             for (int j = 0; j < image->height(); j++) {
                 Color& pixel = image->at(i, j);
@@ -262,5 +266,65 @@ namespace prog {
         delete image; //delete original image
         image = rotated_image;  // move the rotated image to the original image's place since it's empty
     }
+    void Script::median_filter() {
+        int ws;
+        input >> ws; // read the window size value from the script file
 
+        // create "filtered_image" with the same dimensions as the original image
+        Image* filtered_image = new Image(image->height(), image->width());
+
+        // loop through all pixels in given image...
+        for (int x = 0; x < image->width(); x++) {
+            for (int y = 0; y < image->height(); y++) {
+                vector<rgb_value> red_values; // create a vector to store the red components
+                vector<rgb_value> green_values; // create a vector to store the green components
+                vector<rgb_value> blue_values;  // create a vector to store the blue components
+
+                // loop through all neighboring pixels of (x, y)
+                for (int nx = max(0, x - ws/2); nx <= min(image->width() - 1, x + ws/2); nx++) {
+                    for (int ny = max(0, y - ws/2); ny <= min(image->height() - 1, y + ws/2); ny++) {
+                        // if neighboring pixel is within borders...
+                        if (nx >= 0 && nx < image->width() && ny >= 0 && ny <= image->height()) {
+                            Color& pixel = image->at(nx, ny); // get pixel
+                            red_values.push_back(pixel.red()); // push back "pixel"'s red component to vector created before
+                            green_values.push_back(pixel.green()); // push back "pixel"'s green component to vector created before
+                            blue_values.push_back(pixel.blue());// push back "pixel"'s blue component to vector created before
+                        }
+                    }
+                }
+
+                sort(red_values.begin(), red_values.end()); // sort all red components stored in vector
+                sort(green_values.begin(), green_values.end()); // sort all green components stored in vector
+                sort(blue_values.begin(), blue_values.end());   // sort all blue components stored in vector
+                
+                rgb_value mr; // median value of red components
+                rgb_value mg; // median value of green components
+                rgb_value mb; // median value of blue components
+
+                // all vector sizes are the same, so create "size" to represent how many components are stored in each vector
+                int size = red_values.size(); 
+
+                // if vector's size is even, median values will be the sum of two middle values divided by 2 or multiplied by 0.5
+                if (size % 2 == 0) {
+                    mr = 0.5 * (red_values[size/2 - 1] + red_values[size/2]);
+                    mg = 0.5 * (green_values[size/2 - 1] + green_values[size/2]);
+                    mb = 0.5 * (blue_values[size/2 - 1] + blue_values[size/2]);
+                }
+                // if it's odd, median values are the ones in the middle
+                else {
+                    mr = red_values[size/2];
+                    mg = green_values[size/2];
+                    mb = blue_values[size/2];
+                }
+
+                // change pixels color in "filtered_image" to the median values
+                Color& pixel = filtered_image->at(x,y); 
+                pixel.red() = mr;
+                pixel.green() = mg;
+                pixel.blue() = mb;
+            }   
+        }
+        delete image; // delete original image
+        image = filtered_image; // move the filtered image to the original image's place since it's empty
+    }
 }
