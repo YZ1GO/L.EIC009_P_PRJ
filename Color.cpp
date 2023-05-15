@@ -1,10 +1,10 @@
 #include "Color.hpp"
-#include <sstream> // to use "stoi" function
+#include <sstream> // to use "stoi"
 #include <iomanip> // to use "setfill" and "setw"
 
 namespace prog {
     Color::Color() {
-        // default constructor with color = black
+        // default constructor with color = black (0, 0, 0)
         r = 0;
         g = 0;
         b = 0;

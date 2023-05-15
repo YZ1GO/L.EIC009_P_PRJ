@@ -24,7 +24,7 @@ namespace prog
       rgb_value& green();
       rgb_value blue() const;
       rgb_value& blue();
-      Color(const string& hexcode); // function to turn hexcode color to rgb color
+      Color(const string& hexcode); // constructor to get rgb color from hexcode
       static string rgb_to_hexcode(const Color& c); // function to turn rgb color to a string representing hexcode color
       bool operator<(const Color& other) const; // "operator<" to allow to implement map<Color, string> because map requires its key values ordered
   };

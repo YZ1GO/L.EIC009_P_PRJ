@@ -6,9 +6,9 @@ namespace prog
   {
     this->width_ = w;   // width = number of columns
     this->height_ = h;  // height = number of rows
-    this->pixels_ = vector<vector<Color>>(height_, vector<Color>(width_, fill)); 
     // create a vector of vectors to represent a 2D matrix and set all pixels to the "fill" color
     // the matrix has "height_" rows and "width_" columns
+    this->pixels_ = vector<vector<Color>>(height_, vector<Color>(width_, fill)); 
   }
   Image::~Image() 
   {

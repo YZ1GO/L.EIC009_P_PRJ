@@ -1,7 +1,7 @@
 #ifndef __prog_Image_hpp__
 #define __prog_Image_hpp__
 #include "Color.hpp"
-#include <vector> //include vector to create vector to store pixels data
+#include <vector> // to create a vector to store pixels data
 using namespace std;
 
 namespace prog
