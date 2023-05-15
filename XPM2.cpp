@@ -1,7 +1,7 @@
 #include "XPM2.hpp"
-#include <fstream>
-#include <unordered_map>
-#include <map>
+#include <fstream> // to manipulate files
+#include <unordered_map> // to use "unordered_map"
+#include <map> // to use "map"
 
 namespace prog {
 
@@ -74,6 +74,5 @@ namespace prog {
             }
             out << line << endl;
         }
-
     }
 }

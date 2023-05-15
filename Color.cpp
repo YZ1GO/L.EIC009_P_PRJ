@@ -60,13 +60,12 @@ namespace prog {
     string Color::rgb_to_hexcode(const Color& c) {
         // stringstream to build hexcode by converting the rgb values to a string
         stringstream hexcode;
-        // perform bitwise & operation between the rgb value and "0xFF"(11111111) to get 8 bits that represent a rgb value
+        // perform bitwise & operation between the rgb value and "0xFF"(11111111) to get least significant 8 bits that represent a rgb value
         hexcode << "#" << setfill('0') << setw(2) << hex << uppercase << (c.red() & 0xFF) 
                 << setfill('0') << setw(2) << hex << uppercase << (c.green() & 0xFF) 
                 << setfill('0') << setw(2) << hex << uppercase << (c.blue() & 0xFF);
         return hexcode.str();
     }
-    // implement function "operator<" to be able to use map<Color, string>
     bool Color::operator<(const Color& other) const {
     if (r < other.r)
         return true;
