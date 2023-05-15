@@ -41,7 +41,7 @@ namespace prog {
 
         map<Color, string> all_colors; // create a data structure to store colors and their respective encoding character
 
-        char encode = '.'; // variable to encode first color
+        char encode = '*'; // variable to encode first color
 
         // loop through all pixels in given image...
         for (int x = 0; x < image->width(); x++) {
