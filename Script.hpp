@@ -34,7 +34,9 @@ namespace prog
     void crop(); // function to crop image, reducing it to all pixels contained in the rectangle defined by top-left corner (x, y), width w and height h
     void rotate_left(); // function to rotate image to the left
     void rotate_right(); // function to rotate image to the right
-    void median_filter(); 
+    void median_filter(); // funtion to replace each pixel (x, y) by “a median pixel” of neighboring pixels to (x,y) inside a window size of size ws * ws
+    void xpm2_open(); // function to open xpm2 file format
+    void xpm2_save(); // funtion to save xpm2 file format
   };
 }
 #endif

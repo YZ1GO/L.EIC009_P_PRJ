@@ -93,6 +93,14 @@ namespace prog {
                 median_filter();
                 continue;
             }
+            if (command == "xpm2_open") {
+                xpm2_open();
+                continue;
+            }
+            if (command == "xpm2_save") {
+                xpm2_save();
+                continue;
+            }
         }
     }
     void Script::open() {
@@ -266,8 +274,7 @@ namespace prog {
         delete image; //delete original image
         image = rotated_image;  // move the rotated image to the original image's place since it's empty
     }
-    void Script::median_filter()
-    {
+    void Script::median_filter() {
         int ws;
         input >> ws; // read the window size value from the script file
 
@@ -334,5 +341,18 @@ namespace prog {
         }
         delete image;           // delete original image
         image = filtered_image; // move the filtered image to the original image's place since it's empty
+    }
+    void Script::xpm2_open() {
+        // replace current image (if any) with image read from XPM2 file
+        clear_image_if_any();
+        string filename;
+        input >> filename;
+        image = loadFromXPM2(filename);
+    }
+    void Script::xpm2_save() {
+        // save current image to XPM2 file
+        string filename;
+        input >> filename;
+        saveToXPM2(filename, image);
     }
 }
