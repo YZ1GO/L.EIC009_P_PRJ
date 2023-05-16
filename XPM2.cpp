@@ -1,7 +1,7 @@
 #include "XPM2.hpp"
 #include <fstream> // to manipulate files
-#include <unordered_map> // to use "unordered_map"
-#include <map> // to use "map"
+#include <unordered_map>
+#include <map>
 
 namespace prog {
 
