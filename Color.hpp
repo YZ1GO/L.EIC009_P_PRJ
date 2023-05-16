@@ -10,7 +10,6 @@ namespace prog
   class Color
   {
     private:
-      // TODO: private fields required for color representation.
       rgb_value r;  // variable for red component
       rgb_value g;  // variable for green component
       rgb_value b;  // variable for blue component

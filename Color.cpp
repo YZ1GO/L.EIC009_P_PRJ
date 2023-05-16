@@ -30,24 +30,14 @@ namespace prog {
     rgb_value Color::blue() const {
         return b;   //get blue component
     }
-
-    // TODO: remove this DUMMY variable once you have appropriate fields for representing colors.
-    // rgb_value DUMMY_rgb_value = 0; 
-
     rgb_value& Color::red()  {
-        // mutator for red component
-        rgb_value& red_mutator = r;
-        return red_mutator;
+        return r;   // mutator for red component
     }
     rgb_value& Color::green()  {
-        // mutator for green component
-        rgb_value& green_mutator = g;
-        return green_mutator;
+        return g;   // mutator for green component 
     }
     rgb_value& Color::blue()  {
-        // mutator for blue component
-        rgb_value& blue_mutator = b;
-        return blue_mutator;
+        return b;   // mutator for blue component
     }
     Color::Color(const string& hexcode) {
         // use "stoi" to turn hexcode string to integer values rgb

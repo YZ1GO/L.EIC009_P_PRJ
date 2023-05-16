@@ -21,10 +21,6 @@ namespace prog
   {
     return height_; // get height value
   }
-
-  // TODO: remove this DUMMY_color variable once you have appropriate fields for representing image pixels.
-  // Color DUMMY_color;
-
   Color& Image::at(int x, int y)
   {
     return pixels_[y][x]; // get color of pixel which value can be changed
