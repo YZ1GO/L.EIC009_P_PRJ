@@ -1,0 +1,34 @@
+SUBMISSION INFORMATION
+======================
+
+Group identifier: 13.09
+
+Summary of implemented features:
+
+1 - Color.hpp e Color.cpp
+	- include de <string>
+	- include de <sstream>
+	- include de <iomanip>
+	- private fields da class Color
+	- funções pretendidas dos public fields da class Color
+	- 3 funções extras para realizar o XPM2.cpp
+		- 1ª para transformar hexcode para rgb
+		- 2ª para transformar rgb para hexcode
+		- 3ª operator< para poder utilizar "map"
+		
+2 - Image.hpp e Image.cpp
+	- include de <vector>
+	- using namespace std
+	- private fields da class Image
+	- funções pretendidas dos public fields da class Image
+	
+3 - Script.hpp e Script.cpp
+	- include de <algorithm>
+	- 13 funções pretendidas nos private fields da Class Script (desde "invert()" até "xpm2_save()")
+	- respetivos comandos na função "run()"
+
+4 - XPM2.cpp
+	- include de <fstream>
+	- include de <unordered_map>
+	- include de <map>
+	- código para as funções "loadFromXPM2" e "saveToXPM2"
