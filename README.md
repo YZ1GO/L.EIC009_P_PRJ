@@ -4,13 +4,35 @@ This project involves implementing a C++ program for representing and processing
 
 ## Features
 
-- **Data Analysis:** Perform in-depth analyses on airport networks, flights, and traffic statistics.
-- **Search Functionality:** Easily search for flights by city, airline, or available destinations.
-- **Route Mapping:** Discover and navigate paths between airports.
-- **Efficient Management:** Access flight data for specific departure and arrival airports or cities.
-- **Optimized Trips:** Find the best routes with various filters, ensuring tailored travel solutions.
-- **Customized Layovers:** Enable users to personalize layovers during their travel.
-- **User-Friendly Interface:** Enjoy a simple and intuitive menu-driven system for seamless navigation.
+- **Color Representation:** 
+  - Implemented a class (`Color`) for representing RGB colors.
+  - Support for accessing individual color channels (red, green, blue).
+
+- **Image Representation:** 
+  - Developed a class (`Image`) for representing images with specified dimensions.
+  - Included functionalities for pixel manipulation within images.
+
+- **Script Processing:** 
+  - Implemented a script interpreter to execute image processing commands from script files.
+
+- **Basic Image Manipulations:** 
+  - Supported commands for basic image manipulations:
+    - Inversion
+    - Grayscale conversion
+    - Color replacement
+    - Filling
+    - Horizontal and vertical mirroring
+
+- **Dimension-Changing Operations:** 
+  - Provided commands for manipulating image dimensions:
+    - Cropping
+    - Rotating left and right
+
+- **Advanced Functionality:** 
+  - **Median Filter:**
+    - Applied a median filter to images for noise reduction.
+  - **XPM2 File Support:** 
+    - Implemented loading and saving images in the XPM2 file format.
 
 ## Usage
 
