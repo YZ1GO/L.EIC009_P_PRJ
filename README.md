@@ -62,7 +62,7 @@ $ make clean all
 ## Try it yourself
 
 You can find the files for the project and the project assignment [here](files) <br>
-[Download Zip File](files/project.zip)
+[Download Zip File](files/project.zip?raw=true) <br>
 <a href="files/Project assignment.html" target="_blank">Follow the assignment</a>
 
 
