@@ -62,8 +62,9 @@ $ make clean all
 ## Try it yourself
 
 You can find the files for the project and the project assignment [here](files) <br>
-Unzip the [files](https://github.com/YZ1GO/L.EIC009_P_PRJ01/blob/c524284ef09d41053816c2bf53badf4e09867e1c/files/project.zip) <br>
-Follow the [description](https://github.com/YZ1GO/L.EIC009_P_PRJ01/blob/c524284ef09d41053816c2bf53badf4e09867e1c/files/Project%20assignment.html)
+<a href="files/project.zip">Download Zip File</a><br>
+<a href="files/Project assignment.html" target="_blank">Follow the assignment</a>
+
 
 ## Final Grade: 19.80/20
 
