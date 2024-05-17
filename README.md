@@ -64,7 +64,3 @@ $ make clean all
 You can find the files for the project and the project assignment [here](files) <br>
 [Download Zip File](files/project.zip?raw=true) <br>
 <a href="files/Project assignment.html" target="_blank">Open the html file in the browser and follow the assignment to do the project</a>
-
-
-## Project Grade: 19.80/20
-
